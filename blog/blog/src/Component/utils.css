@@ -1,0 +1,22 @@
+
+#head-name{
+    width: 100%;
+    text-align: left;
+    padding-left: 65px;
+    
+}
+#head-nav{
+    width: 100%;
+}
+.list-style-none{
+    list-style-type: none;
+}
+.flexbox{
+    display: flex;
+}
+.floatright{
+    float:right;
+}
+.floatleft{
+    float:left;
+}
