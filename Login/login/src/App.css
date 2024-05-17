@@ -1,7 +1,23 @@
 .App {
   text-align: center;
+  background-image: url(https://c1.wallpaperflare.com/preview/358/907/621/brick-wall-interior-construction.jpg);
+  filter: blur(1px);
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-size: cover;
 }
-
+.wrapper{
+  position: relative;
+  background-color: transparent;
+}
+.content{
+  padding: 20px 40px;
+  /* filter: none; */
+  /* z-index: 1; */
+  background-color: transparent;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

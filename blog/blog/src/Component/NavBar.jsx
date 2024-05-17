@@ -1,24 +1,44 @@
-import React from 'react'
 import './utils.css';
+import './NavBar.css'
 import PageTitle from './PageTitle.jsx';
-export default function
-    () {
-    return (
-        <>
-            <div className='flexbox '>
-                <div id="head-name" className='m-3'>Alok</div>
-                <div id="head-nav">
-                    <ul className="list-style-none flexbox floatright mr-5">
-                        <li className='m-3'>Blog</li>
-                        <li className='m-3'>Project</li>
-                        <li className='m-3'>About</li>
-                        <li className='m-3'>Newsletter</li>
-                    </ul>
+import React, { Component } from 'react'
+
+class NavBar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            auth: false,
+        }
+        console.log("[NavBar]Constructor");
+
+    }
+    componentWillUnmount() {
+        console.log("[NavBar]componentWillUnmount");
+    }
+    componentDidMount() {
+        // this.setState({auth:true});
+        console.log('[NavBar]ComponentDidMount');
+    }
+
+    render() {
+        return (
+            <>
+                <div className='flexbox '>
+                    <div id="head-name" className='m-3'>{this.props.title}</div>
+                    <div id="head-nav">
+                        <ul className="list-style-none flexbox floatright mr-5">
+                            <li className='m-2'><a href="blog.html">Blog</a></li>
+                            <li className='m-2'><a href="project.html">Project</a></li>
+                            <li className='m-2'><a href="about.html">About</a></li>
+                            <li className='m-2'><a href="newsletter.html">Newsletter</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <hr/>
-            <PageTitle title={"THE BLOG"}/>
-            <hr/>
-        </>
-    )
+                <hr />
+                <PageTitle title={"THE BLOG"} />
+                <hr />
+            </>
+        )
+    }
 }
+export default NavBar;

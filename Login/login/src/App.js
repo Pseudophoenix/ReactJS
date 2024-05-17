@@ -2,7 +2,10 @@ import './App.css';
 import React, { Component } from 'react'
 import Login from './Component/Login';
 import Register from './Component/Register';
-import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { sendEmailVerification } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, set } from "firebase/database";
 // if (firebase.app.length<0) {
@@ -27,11 +30,11 @@ export default class App extends Component {
       name: null,
       email: null,
       message: "",
-      type:null,
+      type: null,
     }
   }
   pageSwitchHandler = (event) => {
-    this.setState({ page: !this.state.page,message:""})
+    this.setState({ page: !this.state.page, message: "" })
     event.preventDefault();
   }
   registrationHandler = (event) => {
@@ -50,17 +53,19 @@ export default class App extends Component {
     createUserWithEmailAndPassword(auth, email, pass)
       .then((userCredential) => {
         // Signed up 
-        this.setState({message:"User Registered Successfully!!",type:1},()=>{
-          event.target.email.value="";
-          event.target.pass.value="";
-          event.target.confirm.value="";
+        sendEmailVerification(userCredential.user);
+        this.setState({ message: "User Registered Successfully!!", type: 1 }, () => {
+          event.target.email.value = "";
+          event.target.pass.value = "";
+          event.target.confirm.value = "";
         });
+
         console.log(userCredential);
         // const user = userCredential.user;
         // ...
       })
       .catch((error) => {
-        this.setState({type:2,message:error.message});
+        this.setState({ type: 2, message: error.message });
         // const errorCode = error.code;
         // const errorMessage = error.message;
         // console.log(error.Error);
@@ -73,20 +78,55 @@ export default class App extends Component {
     const email = event.target.email.value;
     const pass = event.target.pass.value;
     const auth = getAuth();
-    signInWithEmailAndPassword(auth,email,pass).then((data)=>{
+    signInWithEmailAndPassword(auth, email, pass).then((data) => {
       console.log(data);
-      this.setState({message:"data",type:1});
-    }).catch((error)=>{
-      this.setState({message:"error",type:2});
+      if (data.user.emailVerified == true)
+        this.setState({ message: "Succesfully Logged In", type: 1 }, () => {
+          event.target.email.value = "";
+          event.target.pass.value = "";
+        });
+      else
+        this.setState({ message: "Your email is not verified yet.", type: 0 });
+    }).catch((error) => {
+      this.setState({ message: error.message, type: 2 });
       console.log(error);
+      // sendEmailVerification();
     });
+
     console.log("Logged");
-      
+
+  }
+  resetPasswordHandler = (event) => {
+    const auth=getAuth();
+    console.log(event.target.email);
+    // const email=event.target.email.value;
+    // console.log("Passsword Reset");
+    // sendPasswordResetEmail(auth,email).then((data)=>{
+    //   console.log("Successfully sent the mail for reset password to ",email);
+    //   console.log(data);
+    // }).catch((error)=>{
+    //   console.log(error);
+    //   console.log(error.code,error.message);
+    // });
+
+  }
+  googleLogInHandler=()=>{
+    console.log("Hey Google");  
+    const auth=getAuth();
+    const goog=new GoogleAuthProvider();
+    signInWithPopup(auth,goog).then((result)=>{
+      console.log(result);
+      this.setState({message:"Hey "+result.user.displayName+"! You have logged in Successfully",type:1});
+    }).catch((error)=>{
+      console.log(error);
+      this.setState({message:""});
+    });
+    
   }
   render() {
     return (
       <>
-        {this.state.page == 0 ? (<Register type={this.state.type} message={this.state.message} switch={this.pageSwitchHandler} register={this.registrationHandler} />) : (<Login message={this.state.message} type={this.state.type}switch={this.pageSwitchHandler} login={this.signInHandler}/>)}
+        {this.state.page == 0 ? (<Register type={this.state.type} message={this.state.message} switch={this.pageSwitchHandler} register={this.registrationHandler} google={this.googleLogInHandler}/>) : (<Login message={this.state.message} type={this.state.type} switch={this.pageSwitchHandler} login={this.signInHandler} resetPass={this.resetPasswordHandler} google={this.googleLogInHandler}/>)}
       </>
     )
   }

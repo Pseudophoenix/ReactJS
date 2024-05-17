@@ -1,5 +1,7 @@
-import React from 'react'
+import React from 'react';
+
 import { initializeApp } from 'firebase/app';
+import { Link } from 'react-router-dom';
 export default function Register(props) {
     var messagetype=[];
     if(props.type===1){
@@ -15,7 +17,7 @@ export default function Register(props) {
                     <h2>Create Account</h2>
                     <p>Get started with your free account</p>
                     <div className={messagetype} >{props.message}</div>
-                    <button  className="btn btn-primary btn-m btn-block">SignUp via Google</button>
+                    {/* <Link className="btn btn-primary btn-m btn-block" onClick={props.google}>SignUp via Google</Link> */}
                     <button  className="btn btn-secondary btn-m btn-block">SignUp via Facebook</button>
                     <p>or</p>
                     <form onSubmit={props.register}>
@@ -29,13 +31,13 @@ export default function Register(props) {
                             <div className="input-group-prepend">
                                 <div className="input-group-text"></div>
                             </div>
-                            <input type="text" className="form-control" id="inlineFormInputGroupUsername2" placeholder="Create Password" name="pass" />
+                            <input type="password" className="form-control" id="inlineFormInputGroupUsername2" placeholder="Create Password" name="pass" />
                         </div>
                         <div className="input-group mb-2 mr-sm-2">
                             <div className="input-group-prepend">
                                 <div className="input-group-text"></div>
                             </div>
-                            <input type="text" className="form-control" id="inlineFormInputGroupUsername2" placeholder="Repeat Password" name="confirm" />
+                            <input type="password" className="form-control" id="inlineFormInputGroupUsername2" placeholder="Repeat Password" name="confirm" />
                         </div>
                         <input type="submit" className="btn btn-secondary btn-m btn-block" style={{ backgroundColor: "#33cc4b" }} value="Create Account" />
                     </form>
